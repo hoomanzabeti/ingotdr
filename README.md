@@ -2,7 +2,11 @@
 
 **INGOT-DR** ( **IN**terpretable **G**r**O**up **T**esting for **D**rug **R**esistance) is an interpretable rule-based predictive model base on **Group Testing** and **Boolean Compressed Sesing**.
 
-## Installation
+## Install
+INGOT-DR can be installed from PyPI
+```python
+pip install ingotdr
+```
 
 ## Train and evaluate an INGOT-DR classifier
 ```python
