@@ -47,7 +47,7 @@ class INGOTClassifier(BaseEstimator, ClassifierMixin):
             only_slack_lp_relaxation (bool): A flag to only use the lp relaxed slack variables. Default to False.
             lp_rounding_threshold (float): Threshold for lp solutions for Rounding to 0 and 1. Default to 0.
             Range from 0 to 1.
-            is_it_noiseless (bool): A flag to specify whether the problem is noisy or noiseless. Default to True.
+            is_it_noiseless (bool): A flag to specify whether the problem is noisy or noiseless. Default to False.
             solver_name (str): Solver's name provided by Pulp. Default to 'PULP_CBC_CMD'.
             solver_options (dic): Solver's options provided by Pulp. Default to None.
         """
@@ -225,11 +225,11 @@ class INGOTClassifier(BaseEstimator, ClassifierMixin):
 
     def solution(self):
         """
-        Function to provide a vector of decoder solution.
+        Function to provide a vector of features importance.
         Parameters:
             self (INGOTClassifier): Classifier object.
         Returns:
-            w_solutions (vector): A vector of features values solution.
+            w_solutions (vector): A vector of features importance.
         """
         assert pl.LpStatus[self.prob_.status] != 'Infeasible', "Problem is {}! Set 'is_it_noiseless'" \
                                                                " argument to False. If there is still a problem you " \
