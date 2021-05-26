@@ -146,6 +146,8 @@ clf = ingot.INGOTClassifier(w_weight=0, lambda_z=0, false_positive_rate_upper_bo
 |True|False|False|LP relaxation of Eq (4) with objective function of Eq (11)|
 |True|False|True|LP relaxation of Eq (3)|
 True|True|True|LP relaxation of Eq (3)|
+
+
 **Note:** True value of _lp_relaxation_ or _is_it_noiseless_ with override _only_slack_lp_relaxation_. i.e. if one of them is True
 then value of _only_slack_lp_relaxation_ is not important.
 

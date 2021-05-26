@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='ingotdr',
-    version='0.0.3',
+    version='0.0.4',
     description="INGOT-DR (INterpretable GrOup Testing for Drug Resistance)",
     author="Hooman Zabeti",
     author_email="hzabeti@sfu.ca",
