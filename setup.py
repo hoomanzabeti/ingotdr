@@ -5,12 +5,12 @@ with open("README.md", "r") as fh:
 
 setup(
     name='ingotdr',
-    version='0.0.1',
+    version='0.0.3',
     description="INGOT-DR (INterpretable GrOup Testing for Drug Resistance)",
     author="Hooman Zabeti",
     author_email="hzabeti@sfu.ca",
     url="https://github.com/hoomanzabeti/ingotdr",
-    py_modules=["INGOT"],
+    py_modules=["ingot"],
     package_dir={'': 'src'},
     long_description=long_description,
     long_description_content_type="text/markdown",
