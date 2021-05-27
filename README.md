@@ -1,16 +1,32 @@
 # INGOT-DR
 
 **INGOT-DR** ( **IN**terpretable **G**r**O**up **T**esting for **D**rug **R**esistance) is an interpretable rule-based
-predictive model base on **Group Testing** and **Boolean Compressed Sesing**. For more details and citation please see
-the [paper](#paper).
+predictive model base on **Group Testing** and **Boolean Compressed Sesing**. For more details and citation please see the 
+INGOT-DR [paper](#citation). To access scripts used to produce the results in the paper please visit 
+[INGOT-DR Project](https://github.com/hoomanzabeti/INGOT_DR_project). To access the data used in the paper
+please visit/cite
+[M.tuberculosis dataset for drug resistant](#https://github.com/AmirHoseinSafari/M.tuberculosis-dataset-for-drug-resistant).
 
-## Install
+##Table of content
+
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Arguments](#arguments)
+  * [Methods](#methods)
+  * [Training and evaluation](#training-and-evaluation)
+  * [Hyper-parameter tuning](#hyper-parameter-tuning)
+  * [Optimizing for different target metric](#optimizing-for-different-target-metric)
+  * [Choosing the solver](#choosing-the-solver)
+ * [Citation](#citation)
+## Installation
 INGOT-DR can be installed from [PyPI](https://pypi.org/project/ingotdr/). 
 ```shell
 pip install ingotdr
 ```
-## Train and evaluate an INGOT-DR classifier
-
+## Usage
+INGOT-DR is implemented as a [scikit-learn](https://scikit-learn.org/stable/index.html)
+classifier. As a result, this classifier is compatible with most of scikit-learn
+tools (e.g. cross validation and hyper-parameter tuning tools). In the following section, we provide some usage examples:
 ### Arguments
 
 ```python
@@ -48,8 +64,11 @@ ingot.INGOTClassifier( w_weight=1, lambda_p=1, lambda_z=1, lambda_e=1, false_pos
 |`learned_rule(return_type='feature_name')`|Return a list of rules. return_type can be 'feature_name' or 'feature_id'.|
 |`write(fileType='mps', **kwargs)`|Create a file from the problem. `fileType` can be 'mps', 'lp', 'json' or 'display'. 'display' shows the ILP/LP problem on screen.|
 
+### Training and evaluation
 **Example:**
-Sample data in the following example is available [here](https://github.com/hoomanzabeti/INGOT_DR_project/tree/master/data).
+The following is an example of training a classifier to predict resistance to second line drug _Ciprofloxacin_ in TB isolates. In this example the
+feature matrix indicates presence/absence of SNPs in TB isolates, and the label vector represents the drug resistance phenotype.
+Sample data is available [here](https://github.com/hoomanzabeti/INGOT_DR_project/tree/master/data).
 ```python
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import balanced_accuracy_score
@@ -83,6 +102,8 @@ Features in the learned rule: ['7570, C, T', '7572, T, C', '7581, G, T', '7582, 
 ```
 
 ### Hyper-parameter tuning
+
+Hyper-parameter tuning via scikit-learn [Grid Search CV](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html):
 
 **Example:**
 ```python
@@ -122,21 +143,25 @@ Balanced accuracy: 0.8449477351916377
 Best params: {'lambda_p': 10, 'lambda_z': 0.01}
 ```
 
+### Optimizing for different target metric
 
-**Note:** _w_weight_ and _lambda_e_ are not part of the main ILP ([Eq (11)](#paper)) defined in the INGOT-DR paper. These two variables
- are defined to provide freedom when _Optimizing for different target metric_ ([section 1.4](#paper)) is needed. The 
+**Note:** _w_weight_ and _lambda_e_ are not part of the main ILP ([Eq (11)](#citation)) defined in the INGOT-DR paper. These two variables
+ are defined to provide freedom when _Optimizing for different target metric_ ([section 1.4](#citation)) is needed. The 
 complete objective function with these two variables would be:
 
 ![complete objective function](https://github.com/hoomanzabeti/INGOT_DR_project/blob/master/data/CompleteObjFunc.gif)
 
+
 **Example:** 
-Classifier corresponding to [Eq (15)](#paper) with maximum rule size k=20 and specificity lower bound t= 90% can be defined as following:
+Classifier corresponding to [Eq (16)](#citation) with maximum rule size k=20 and specificity lower bound t= 90% can be defined as following:
 ```python
 clf = ingot.INGOTClassifier(w_weight=0, lambda_z=0, false_positive_rate_upper_bound=0.1, max_rule_size=20,
                             solver_name='CPLEX_PY')
 ```
 
-|lp_relaxation|only_slack_lp_relaxation|is_it_noiseless|Equation number in the [paper](#paper)|
+The following table shows the combination of arguments needed to define some of ILPs in the [paper](#citation)
+
+|lp_relaxation|only_slack_lp_relaxation|is_it_noiseless|Equation number in the [paper](#citation)|
 |---|---|---|:---:|
 |False|False|False| Eq (11)|
 |False|True|True|Eq (3)|
@@ -151,7 +176,19 @@ True|True|True|LP relaxation of Eq (3)|
 **Note:** True value of _lp_relaxation_ or _is_it_noiseless_ with override _only_slack_lp_relaxation_. i.e. if one of them is True
 then value of _only_slack_lp_relaxation_ is not important.
 
-### Solver 
+**Note:** To recreate and work with [Eq (4)](#citation), you only need to use combination in row 3 and use or tune `lambda_e`
+instead of `lambda_p` and `lambda_z`. For example:
+
+```python
+
+param_grid={'lambda_e': [0.01, 0.1,  1, 10, 100 ]}
+grid = GridSearchCV(estimator=clf, param_grid= param_grid, scoring=scoring, cv=5, refit ='balanced_accuracy',
+                    n_jobs=-1, verbose= 3)
+
+```
+
+
+### Choosing the solver 
 INGOT-DR supports a variety of solvers through the [PuLP](https://pypi.org/project/PuLP/) application programming interface (API). 
 Solvers such as [GLPK](http://www.gnu.org/software/glpk/glpk.html),
 [COIN-OR CLP/CBC](https://github.com/coin-or/Cbc),
@@ -174,9 +211,8 @@ Name and properties of the solver can be specified via ```solver_name``` and
 ```python
 clf = ingot.INGOTClassifier(solver_name='CPLEX_PY', solver_options={'timeLimit': 1800})
 ```
-In the [INGOT-DR](#paper) paper, ```'CPLEX_PY'``` is the main solver. IBM CPLEX for academic use is available
+In the [INGOT-DR](#citation) paper, ```'CPLEX_PY'``` is the main solver. IBM CPLEX for academic use is available
 [here](https://www.ibm.com/academic/technology/data-science). 
-## Paper:
-
-[INGOT-DR: an interpretable classifier forpredicting drug resistance in M. tuberculosis](https://www.biorxiv.org/content/10.1101/2020.05.31.115741v2.full).
+## Citation:
+For general use please cite our paper: [INGOT-DR: an interpretable classifier forpredicting drug resistance in M. tuberculosis](https://www.biorxiv.org/content/10.1101/2020.05.31.115741v2.full).
 ([bibtex](https://scholar.googleusercontent.com/scholar.bib?q=info:bQ6FP1AQpvkJ:scholar.google.com/&output=citation&scisdr=CgXpW1OOEIO721E6sjI:AAGBfm0AAAAAYKw_qjKcmF8c1XZV57JWSMoDkwpaXPr8&scisig=AAGBfm0AAAAAYKw_qrApE1nCy1ns_BxQVZG_vrbY2Ot3&scisf=4&ct=citation&cd=-1&hl=en))
