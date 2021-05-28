@@ -7,7 +7,7 @@ INGOT-DR [paper](#citation). To access scripts used to produce the results in th
 please visit/cite
 [M.tuberculosis dataset for drug resistant](#https://github.com/AmirHoseinSafari/M.tuberculosis-dataset-for-drug-resistant).
 
-##Table of content
+## Table of content
 
 * [Installation](#installation)
 * [Usage](#usage)
