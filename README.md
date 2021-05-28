@@ -95,6 +95,8 @@ print("Features in the learned rule: {}".format(clf.learned_rule()))
 ```
 Output:
 
+**Note:** Results may slightly vary for different solvers. Please see [Choosing the solver](#choosing-the-solver).
+
 ```shell
 Balanced accuracy: 0.8449477351916377
 Accuracy: 0.9550561797752809
@@ -211,7 +213,7 @@ Name and properties of the solver can be specified via ```solver_name``` and
 ```python
 clf = ingot.INGOTClassifier(solver_name='CPLEX_PY', solver_options={'timeLimit': 1800})
 ```
-In the [INGOT-DR](#citation) paper, ```'CPLEX_PY'``` is the main solver. IBM CPLEX for academic use is available
+**Note:** Results may slightly vary for different solvers. In the [INGOT-DR](#citation) paper, ```'CPLEX_PY'``` is the main solver. IBM CPLEX for academic use is available
 [here](https://www.ibm.com/academic/technology/data-science). 
 ## Citation:
 For general use please cite our paper: [INGOT-DR: an interpretable classifier forpredicting drug resistance in M. tuberculosis](https://www.biorxiv.org/content/10.1101/2020.05.31.115741v2.full).
