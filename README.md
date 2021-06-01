@@ -5,7 +5,7 @@ predictive model base on **Group Testing** and **Boolean Compressed Sesing**. Fo
 INGOT-DR [paper](#citation). To access scripts used to produce the results in the paper please visit 
 [INGOT-DR Project](https://github.com/hoomanzabeti/INGOT_DR_project). To access the data used in the paper
 please visit/cite
-[M.tuberculosis dataset for drug resistant](#https://github.com/AmirHoseinSafari/M.tuberculosis-dataset-for-drug-resistant).
+[M.tuberculosis dataset for drug resistant](https://github.com/AmirHoseinSafari/M.tuberculosis-dataset-for-drug-resistant).
 
 ## Table of contents
 
